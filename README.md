@@ -7,3 +7,22 @@
 - **jello和fis构建的优化** : 拓展velocity的应用场景
 - **nodeJS的开放知识管理** : 以月报为入手点
 
+
+**简单、放心的包管理工具 。**
+
+## lego@1.x
+
+https://github.com/imweb/lego
+
+
+## 讨论和报告 Bug
+
+* [查看所有 issue](https://github.com/imweb/lego/issues)
+* [新建 issue](https://github.com/imweb/lego/issues/new)
+
+
+## License
+
+lego is available under the terms of the MIT License.
+
+
