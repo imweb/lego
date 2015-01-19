@@ -21,8 +21,44 @@ https://github.com/imweb/lego
 * [新建 issue](https://github.com/imweb/lego/issues/new)
 
 
+# lego
+
+[![NPM version](https://img.shields.io/npm/v/lego.svg?style=flat)](https://npmjs.org/package/lego)
+[![Build Status](https://img.shields.io/travis/legojs/lego.svg?style=flat)](https://travis-ci.org/legojs/lego)
+[![NPM downloads](http://img.shields.io/npm/dm/lego.svg?style=flat)](https://npmjs.org/package/lego)
+
+Brand new **static package manager** for browser.
+
+---
+
+## Install
+
+```bash
+$ npm install lego -g
+```
+
+## Usage
+
+- Getting Started: http://lego.oa.com/documentation
+- Develop a package: http://lego.oa.com/documentation/develop-a-package
+- 中文文档：http://sorrycc.gitbooks.io/lego-handbook/content/
+
+## Packaging Server
+
+- Website: http://lego.oa.com/
+- Repository: https://github.com/iwmeb/legojs.io/
+
+## Report a issue
+
+* [All issues](https://github.com/iwmeb/lego/issues)
+* [New issue](https://github.com/iwmeb/lego/issues/new)
+
 ## License
 
-lego is available under the terms of the MIT License.
+LEGO is available under the terms of the MIT License.
 
+## Memo
 
+* Why lego3: https://github.com/iwmeb/lego/issues/819
+* Release History: https://github.com/iwmeb/lego/releases
+* lego2: https://github.com/iwmeb/lego/tree/2.x
