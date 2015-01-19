@@ -1,0 +1,97 @@
+#!/usr/bin/env node
+
+var color = require('lego-colorful').color;
+var fs = require('fs');
+var path = require('path');
+var program = require('commander');
+var legorc = require('legorc');
+var vfs = require('vinyl-fs');
+var gulpTemplate = require('gulp-template');
+var inquirer = require('inquirer');
+var semver = require('semver');
+var emptyDir = require('empty-dir').sync;
+
+var NAME_REGEX = require('../lib/sdk/iduri').NAME_REGEX;
+
+/*
+  template directory
+*/
+var homeDir = process.env.HOME || process.env.USERPROFILE;
+if (!homeDir) {
+  homeDir = process.env.HOMEDRIVE + process.env.HOMEPATH;
+}
+var template = path.dirname(__dirname) + '/lib/template/';
+template = template.replace(/^~/, homeDir);
+
+/*
+  program init
+*/
+
+program.on('--help', function() {
+  console.log();
+  console.log('  Change init default template in ~/.lego/legorc');
+  console.log();
+  console.log(color.magenta('  [init]'));
+  console.log('  template = ' + template);
+  console.log();
+});
+
+program.parse(process.argv);
+
+if (!emptyDir(process.cwd())) {
+  console.warn(color.yellow('Existing files here, please run init command in an empty folder!'));
+  return;
+}
+
+console.log('Creating a lego package: ');
+inquirer.prompt([{
+  message: 'Package name',
+  name: 'name',
+  default: path.basename(process.cwd()),
+  validate: function(input) {
+    var done = this.async();
+    if (!NAME_REGEX.test(input)) {
+      console.warn(color.red('Must be only lowercase letters, numbers, dashes or dots, and start with lowercase letter.'));
+      return;
+    }
+    done(true);
+  }
+}, {
+  message: 'Version',
+  name: 'version',
+  default: '0.0.0',
+  validate: function(input) {
+    var done = this.async();
+    if (!semver.valid(input)) {
+      console.warn(color.red('Must be a valid semantic version (semver.org).'));
+      return;
+    }
+    done(true);
+  }
+}, {
+  message: 'Description',
+  name: 'description'
+}, {
+  message: 'Author',
+  name: 'author',
+  default: require('whoami')
+}], function( answers ) {
+  answers.varName = answers.name.replace(/\-(\w)/g, function(all, letter){
+    return letter.toUpperCase();
+  });
+  answers.yuanUrl = legorc.get('registry');
+
+  vfs.src(path.join(template, '**'), { dot: true })
+    .pipe(gulpTemplate(answers))
+    .pipe(vfs.dest('./'))
+    .on('end', function() {
+      // https://github.com/npm/npm/issues/1862
+      fs.renameSync('./gitignore', './.gitignore');
+      fs.renameSync('./legoignore', './.legoignore');
+      fs.renameSync('./travis.yml', './.travis.yml');
+
+      console.log();
+      console.log(color.green('Initialize a lego package Succeccfully!'));
+      console.log();
+    });
+});

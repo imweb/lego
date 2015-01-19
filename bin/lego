@@ -1,0 +1,71 @@
+#!/usr/bin/env node
+
+require('lego-colorful').colorful();
+
+var join = require('path').join;
+var exists = require('fs').existsSync;
+var program = require('commander');
+var spawn = require('win-spawn');
+
+var run = require('../lib/utils/run');
+var pkg = require('../package');
+
+program
+  .version(pkg.version, '-v, --version')
+  .usage('<command> [options]')
+  .on('--help', printHelp)
+  .parse(process.argv);
+
+var subcmd = program.args[0];
+var args = process.argv.slice(3);
+
+
+if (!subcmd) {
+  program.help();
+} else if (subcmd === 'help') {
+  var helpcmd = program.args[1];
+  var bin = executable(helpcmd);
+  if (!helpcmd || !bin) {
+    process.stdout.write(program.helpInformation());
+    program.emit('--help');
+    process.exit();
+  }
+  spawn(bin, ['--help'], {stdio: 'inherit', customFds: [0, 1, 2]});
+} else {
+  var bin = executable(subcmd);
+  if (bin) {
+    run.record(subcmd);
+    spawn(bin, args, {stdio: 'inherit', customFds: [0, 1, 2]});
+  } else {
+    program.help();
+  }
+}
+
+function printHelp() {
+  console.log('  System Commands:'.to.bold.magenta.color);
+  console.log();
+  console.log('    config         configuration for lego');
+  console.log('    login          login your account');
+  console.log('    completion     output completion bash script');
+  console.log();
+  console.log('  Package Commands:'.to.bold.green.color);
+  console.log();
+  console.log('    init           initialize a package');
+  console.log('    install        install a package');
+  console.log('    publish        publish a package');
+  console.log('    unpublish      unpublish a package');
+  console.log('    ls             show dependencies tree');
+  console.log('    info           information of a package');
+  console.log('    search         search packages');
+  console.log('    test           test a package');
+  console.log('    doc            documentation manager');
+  console.log('    build          build a package');
+  console.log();
+}
+
+function executable(subcmd) {
+  var file = join(__dirname, 'lego-' + subcmd);
+  if (exists(file)) {
+    return file;
+  }
+}

@@ -1,0 +1,18 @@
+#
+# lego command completion script
+#
+# Installation: lego completion >> ~/.bashrc  (or ~/.zshrc)
+#
+
+CMD="config help info tree login search unpublish publish install build init test doc completion"
+CMDARRAY=(config help info tree login search unpublish publish install build init test doc completion)
+
+# zsh
+type compctl > /dev/null 2>&1 && compctl -k CMDARRAY lego 
+
+# bash
+_lego_completion() {
+  local word=${COMP_WORDS[COMP_CWORD]}
+  COMPREPLY=($(compgen -W "$CMD" -- "${word}"))
+}
+type complete > /dev/null 2>&1 && complete -F _lego_completion lego

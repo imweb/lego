@@ -1,0 +1,59 @@
+#!/usr/bin/env node
+
+require('lego-colorful').colorful();
+var program = require('commander');
+var log = require('lego-log');
+var publish = require('../lib/client').publish;
+var readJSON = require('fs-extra').readJSONSync;
+var exists = require('fs').existsSync;
+
+program
+  .usage('[options] name')
+  .option('-r, --registry <url>', 'registry url of yuan server')
+  .option('-I, --input-directory <dir>', 'input directory, default: current working directory')
+  .option('--tag <tag>', 'publish module with a tag, default: stable')
+  .option('-q, --quiet', 'show less logs')
+  .option('--verbose', 'show more logs')
+  .option('--no-color', 'disable colorful print');
+
+program.on('--help', function() {
+  console.log('  ' + 'Examples:'.to.bold.blue.color);
+  console.log();
+  console.log('   $ ' + 'lego publish'.to.magenta.color);
+  console.log('   $ ' + 'lego publish'.to.magenta.color + ' -r'.to.cyan.color + ' http://lego.oa.com');
+  console.log();
+});
+
+program.parse(process.argv);
+
+console.log();
+log.config(program);
+
+var pkg = exists('package.json') && readJSON('package.json');
+if (!pkg || !pkg.lego) {
+  console.log();
+  log.error('miss', 'package.json or "lego" key');
+  process.exit(2);
+}
+
+log.info('publish', (pkg.name + '@' + pkg.version).to.magenta.color);
+publish({
+  cwd: program.inputDirectory,
+  tag: program.tag,
+  registry: program.registry || pkg.lego.registry
+}, function(err, pkg) {
+  if (err) {
+    if (err.statusCode === 401) {
+      log.error('exit', 'authorization is required. try `lego login`');
+    } else {
+      log.error('exit', err.message);
+    }
+    console.log();
+    process.exit(2);
+  }
+  if (pkg.message && pkg.status) {
+    log[pkg.status](pkg.status, pkg.message);
+  }
+  log.info('published', (pkg.name + '@' + pkg.version + ' ~ ' + pkg.tag).to.green.color);
+  console.log();
+});

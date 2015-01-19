@@ -1,0 +1,51 @@
+#!/usr/bin/env node
+
+require('lego-colorful').colorful();
+var program = require('commander');
+var inquirer = require('inquirer');
+var legorc = require('legorc');
+var log = require('lego-log');
+var login = require('../lib/client').login;
+
+program
+  .usage('[options]')
+  .option('-r, --registry <url>', 'registry url of yuan server')
+  .option('-u, --username <username>', 'username of your account')
+  .option('-a, --authkey <authkey>', 'authkey of your account')
+  .parse(process.argv);
+
+console.log();
+log.config(program);
+
+// run install
+var info = {};
+if (program.authkey && program.username) {
+  info.username = program.username;
+  info.authkey = program.authkey;
+  login(info, done);
+  return;
+}
+
+inquirer.prompt([{
+  message: 'username (your github account username): ',
+  name: 'username'
+}, {
+  type: 'password',
+  message: 'authkey (copy from lego account page): ',
+  name: 'authkey'
+}], function(answers) {
+  info.username = answers.username;
+  info.authkey = answers.authkey;
+  login(info, {registry: program.registry}, done);
+});
+
+function done(err, body) {
+  if (err) {
+    log.error('exit', err.message);
+    process.exit(2);
+  }
+  legorc.set('auth', body.data);
+  console.log();
+  console.log('  login success.'.to.green.color);
+  console.log();
+}

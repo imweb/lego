@@ -1,0 +1,55 @@
+#!/usr/bin/env node
+
+require('lego-colorful').colorful();
+var program = require('commander');
+var log = require('lego-log');
+var doc = require('../lib/doc');
+var readJSON = require('fs-extra').readJSONSync;
+var exists = require('fs').existsSync;
+
+program.usage('[options]');
+
+program
+  .option('-r, --registry <url>', 'registry url of yuan server')
+  .option('-p, --port <port>', 'local server port, default: 8000')
+  .option('-f, --force', 'force build without cache')
+  .option('-v, --verbose', 'show more logging')
+  .option('-q, --quiet', 'show less logging')
+  .option('--no-color', 'disable colorful print')
+  .option('clean', 'clean _site folder')
+  .option('build', 'build documentation')
+  .option('watch', 'start a server of watching source')
+  .option('publish', 'publish documentation for public');
+
+program.on('--help', function() {
+  console.log('  Examples:'.to.bold.blue.color);
+  console.log();
+  console.log('    $', 'lego doc'.to.magenta.color + ' // alias of lego doc watch');
+  console.log('    $', 'lego doc'.to.magenta.color, 'clean');
+  console.log('    $', 'lego doc'.to.magenta.color, 'build');
+  console.log('    $', 'lego doc'.to.magenta.color, 'build -f');
+  console.log('    $', 'lego doc'.to.magenta.color, 'watch');
+  console.log('    $', 'lego doc'.to.magenta.color, 'watch --port 8080');
+  console.log('    $', 'lego doc'.to.magenta.color, 'publish');
+  console.log('    $', 'lego doc'.to.magenta.color, 'publish -r http://lego.oa.com');
+  console.log();
+});
+
+program.parse(process.argv);
+
+log.config(program);
+
+if (!process.argv[2]) {
+  program.watch = true;
+}
+
+var pkg = exists('package.json') && readJSON('package.json');
+if (!pkg || !pkg.lego) {
+  console.log();
+  log.error('miss', 'package.json or "lego" key');
+  process.exit(2);
+}
+
+console.log();
+doc(program);
+console.log();

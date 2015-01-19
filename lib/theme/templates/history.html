@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+
+{%- block title -%}{{config.package.name|title}} - {{post.title}}{%- endblock -%}
+
+{% block content %}
+<article class="hentry">
+  <h1 class="entry-title">{{post.title}}</h1>
+  <div><a href="https://github.com/imweb/lego/issues/722">Specification</a></div>
+  <div class="entry-content">
+    {{ post.html|fixIssues|add_anchor }}
+  </div>
+</article>
+<script>
+seajs.config({
+  paths: {
+    'jquery': 'http://static.alipayobjects.com/jquery'
+  }
+});
+seajs.use('jquery/jquery/1.7.2/jquery', function($) {
+  $('.content-wrapper code').each(function(index, item) {
+    item = $(item);
+    var matcher = item.html().match(/^(tag:)?(NEW|FIXED|IMPROVED|CHANGED|UNRESOLVED)/i);
+    if (matcher) {
+      item.parent().css('padding-left', '150px');
+      item.replaceWith('<span class="history-tag history-tag-'+matcher[2].toLowerCase()+'">'+matcher[2]+'</span>');
+    }
+  });
+});
+</script>
+<style>
+.legojs .content-wrapper p {
+    border-top: 1px dashed #ccc;
+    font-size: 16px;
+    margin: 12px 0;
+    padding: 12px 0 0 0;
+    position: relative;
+}
+
+.legojs .content-wrapper h2 {
+    margin-top: 60px;
+    border-bottom: none;
+    margin-bottom: 10px;
+}
+</style>
+{% endblock %}

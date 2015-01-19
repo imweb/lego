@@ -1,0 +1,37 @@
+#!/usr/bin/env node
+
+require('lego-colorful').colorful();
+var program = require('commander');
+var test = require('../lib/test');
+var readJSON = require('fs-extra').readJSONSync;
+var exists = require('fs').existsSync;
+var log = require('lego-log');
+require('lego-nico/lib/sdk/log').quiet = true;
+
+program.usage('[options]');
+
+program
+  .option('--nocoverage', 'not run coverage calculation')
+  .option('--coveralls', 'coveralls output for travis-ci');
+
+program.on('--help', function() {
+  console.log('  Examples:'.to.bold.blue.color);
+  console.log();
+  console.log('    $ lego test');
+  console.log('    $ lego test --nocoverage');
+  console.log();
+});
+
+program.parse(process.argv);
+
+var pkg = exists('package.json') && readJSON('package.json');
+if (!pkg) {
+  log.error('miss', 'package.json or "lego" key');
+  process.exit(2);
+}
+
+if (!process.argv[1]) {
+  program.help();
+}
+
+test(program);

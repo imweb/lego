@@ -1,0 +1,144 @@
+<!DOCTYPE HTML>
+<html lang="{{theme.lang}}">
+  <head>
+    <meta charset="UTF-8">
+    <title>{%- block title %}{{theme.name|title}}{% endblock -%}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="{{system.name}} {{system.version}}" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link type="image/x-icon" href="/favicon.ico" rel="icon">
+    <link rel="stylesheet" href="{{static_url('css/normalize.css')}}" />
+    <link rel="stylesheet" href="{{static_url('css/site.css')}}" />
+    <link rel="stylesheet" href="{{static_url('css/solarized.css')}}" />
+    {%- include "snippet/head.html" %}
+    <!--[if lt IE 9]>
+    <script src="{{static_url('js/html5shiv.js')}}"></script>
+    <![endif]-->
+    {%- block afterstyle %}{% endblock %}
+  </head>
+  <body class="legojs {%- if config.isCssModule %}legocss{%- endif %}">
+    <div class="body-wrapper">
+      {%- block body %}
+      <aside class="sidebar-wrapper">
+      <h1>
+          <a href="{{content_url('index.html')}}">{{config.package.name|title}}</a>
+      </h1>
+      <p class="sidebar-version">Version: <a href="{{config.yuanUrl}}/package/{{config.package.name}}" title="">{{config.package.version}}</a></p>
+        <p class="sidebar-description" data-keyword="{{config.package.keywords[0]}}">{{config.package.description}}</p>
+        {%- if config.package.repository %}
+        <a class="sidebar-source" href="{{config.package.repository.url|gitRepoUrl}}" target="_blank">View the Project</a>
+        {%- endif %}
+        {%- block sidebar %}
+        <ul class="sidebar-navigation" role="navigation">
+          <li><a href="{{content_url('index.html')}}">Doc</a></li>
+          {%- set example = resource.pages|find('examples') %}
+          {%- if example %}
+          <li><a href="{{permalink_url(example)}}">Demo</a></li>
+          {%- endif %}
+          {%- if theme.hasHistory %}
+          <li><a href="{{content_url('history.html')}}">History</a></li>
+          {%- endif %}
+          {%- if theme.hasTest %}
+          <li><a class="test-link" href="{{content_url('tests/runner.html')}}" target="_blank">Test</a></li>
+          {%- endif %}
+          {%- if config.package.repository and config.package.repository.url %}
+          <li><a class="issue-link" href="{{config.package.repository.url|gitRepoUrl}}/issues" target="_blank">Issues</a></li>
+          {%- endif %}
+        </ul>
+        {%- endblock %}
+        {%- block subsidebar %}
+        {%- endblock %}
+        <div class="qrcode-wrapper">
+          <i class="icon">
+            <div class="icon-qrcode">
+              <svg width="1024" height="1024" viewBox="0 0 1024 1024">
+                <g class="transform-group">
+                  <g transform="translate(0, 18) scale(1, -1) scale(0.024, 0.024)">
+                    <path d="M116.8 792.062v0 0zM334.523 138.877v-72.569h-72.569v72.569h72.569zM334.523 574.339v-72.569h-72.569v72.569h72.569zM769.984 574.339v-72.569h-72.569v72.569h72.569zM189.369-5.705h217.723v217.167h-217.723v-217.167zM189.369 429.185h217.723v217.723h-217.723v-217.723zM624.831 429.185h217.723v217.723h-217.723v-217.723zM479.677 284.031v-362.877h-362.877v362.877h362.877zM769.984-6.277v-72.569h-72.569v72.569h72.569zM915.138-6.277v-72.569h-72.569v72.569h72.569zM915.138 284.031v-217.723h-217.723v72.569h-72.569v-217.723h-72.569v362.877h217.723v-72.569h72.569v72.569h72.569zM479.677 719.493v-362.877h-362.877v362.877h362.877zM915.138 719.493v-362.877h-362.877v362.877h362.877z" fill="#555"></path>
+                  </g>
+                </g>
+              </svg>
+            </div>
+            <div class="qrcode" id="qrcode"></div>
+          </i>
+        </div>
+        <div class="footer-wrapper">
+          {%- include "snippet/foot.html" %}
+        </div>
+      </aside>
+      {%- block afterside %}{% endblock %}
+      <div class="content-wrapper">
+        {% block content %}{% endblock %}
+      </div>
+      {%- endblock %}
+    </div>
+  </body>
+  <script src="{{static_url('js/nprogress.js')}}?nowrap"></script>
+  <script>
+  (function() {
+    NProgress.start();
+    window.onload = NProgress.done;
+    var ready = function(fn) {
+      var doc = document;
+      if(doc.addEventListener) {
+        doc.addEventListener('DOMContentLoaded', fn, false);
+      } else {
+        doc.attachEvent('onreadystatechange', fn);
+      }
+    };
+    ready(function() {
+      NProgress.inc(0.6);
+      seajs.use("{{static_url('js/arale-qrcode.js')}}?nowrap", function(QRCode) {
+        var url = location.href;
+        if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
+          url = url.replace(location.hostname, '{{config.internalIp}}');
+        }
+        var el = new QRCode({
+          text: url,
+          render: 'canvas',
+          width: 120,
+          height: 120
+        });
+        document.getElementById('qrcode').appendChild(el);
+      });
+    }, false);
+  })();
+
+  seajs.config({
+    paths: {
+      jquery: 'http://static.alipayobjects.com/jquery/'
+    }
+  });
+  seajs.use(['jquery/1.7.2/jquery'], function($) {
+    $('.highlight').on('click', '.code-toggle', function() {
+      var pre = $(this).parents('.highlight')
+      if (pre.hasClass('collapse')) {
+        pre.removeClass('collapse')
+        $(this).text('−')
+      } else {
+        pre.addClass('collapse')
+        $(this).text('+')
+      }
+      return false
+    });
+
+    $('h4 em, h3 em, h3 code, h4 code').parent().addClass('doc-api');
+
+    // 给 iframe 加链接
+    $('.nico-iframe').each(function(i, item) {
+      var src = $(item).find('iframe').attr('src')
+      var html = '<a class="new-window" target="_blank" href="' + src + '">Open</a>'
+      $(item).append(html)
+    });
+
+    // 给 code 加收起和展开
+    $('.highlight').each(function(i, item) {
+      var $item = $(item)
+      if ($item.height() > 400) {
+        $item.append('<a class="code-toggle" href="#">+</a>')
+        $item.addClass('collapse')
+      }
+    });
+  });
+  </script>
+</html>
