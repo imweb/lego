@@ -1,17 +1,16 @@
 {
   "name": "lego",
-  "version": "1.1.3",
+  "version": "1.1.4",
   "preferGlobal": "true",
-  "description": "LEGO Web Component Package Manager",
-  "author": "webryan(http://github.com/webryan)",
-  "homepage": "http://github.com/imweb/lego",
+  "description": "Static Package Manager",
+  "author": "Hsiaoming Yang <me@lepture.com>",
+  "homepage": "http://lego.oa.com",
   "repository": {
     "type": "git",
     "url": "https://github.com/imweb/lego/lego.git"
   },
-  "readmeFilename": "README.md",
   "keywords": [
-    "lego",
+    "seajs",
     "module",
     "cmd",
     "legojs",
@@ -27,10 +26,12 @@
   "dependencies": {
     "archy": "~1.0.0",
     "co": "3.1.0",
+    "lego-colorful": "*",
     "commander": "~2.5.0",
-    "lego-require": "~0.0.1",
+    "lego-require": "*",
     "empty-dir": "~0.1.0",
-    "exeq": "~1.0.2",
+    "lego-exeq": "*",
+    "lego-father": "*",
     "extend": "~2.0.0",
     "fs-extra": "~0.13.0",
     "fs-symlink": "~1.1.2",
@@ -41,16 +42,16 @@
     "inquirer": "~0.8.0",
     "internal-ip": "~1.0.0",
     "jscoverage": "~0.3.8",
-    "lego-nico": "~0.0.2",
+    "lnico": "*",
     "react-tools": "~0.12.2",
     "request": "~2.51.0",
     "rimraf": "~2.2.8",
     "semver": "~4.1.0",
-    "serve-lego": "~0.8.0",
-    "lego-build": "~0.0.4",
-    "lego-client": "~0.0.2",
-    "lego-log": "~0.0.2",
-    "legorc": "~0.0.1",
+    "serve-lego": "*",
+    "lego-build": "*",
+    "lego-client": "*",
+    "lego-log": "*",
+    "legorc": "*",
     "tar": "~1.0.3",
     "vinyl-fs": "~0.3.13",
     "whoami": "~0.0.3",
@@ -75,5 +76,6 @@
   "scripts": {
     "test": "make test"
   },
-  "readme": "lego"
+  "readme": "lego",
+  "readmeFilename": "README.md"
 }

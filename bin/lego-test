@@ -6,7 +6,7 @@ var test = require('../lib/test');
 var readJSON = require('fs-extra').readJSONSync;
 var exists = require('fs').existsSync;
 var log = require('lego-log');
-require('lego-nico/lib/sdk/log').quiet = true;
+require('lnico/lib/sdk/log').quiet = true;
 
 program.usage('[options]');
 

@@ -45,7 +45,6 @@ if (!process.argv[2]) {
 
 var pkg = exists('package.json') && readJSON('package.json');
 if (!pkg || !pkg.lego) {
-  console.log();
   log.error('miss', 'package.json or "lego" key');
   process.exit(2);
 }

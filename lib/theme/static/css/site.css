@@ -250,13 +250,13 @@ body.legojs {
   background: transparent;
   font-style: italic;
 }
-.legojs .content-wrapper .nico-iframe {
+.legojs .content-wrapper .lnico-iframe {
   position: relative;
 }
-.legojs .content-wrapper .nico-iframe iframe {
+.legojs .content-wrapper .lnico-iframe iframe {
   width: 100%;
 }
-.legojs .content-wrapper .nico-iframe .new-window {
+.legojs .content-wrapper .lnico-iframe .new-window {
   position: absolute;
   top: 20px;
   right: -28px;

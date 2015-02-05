@@ -1,13 +1,13 @@
 var sinon = require('sinon');
 var doc = require('../lib/doc');
-var nico = require('lego-nico');
+var lnico = require('lnico');
 var muk = require('muk');
 
 describe('doc', function() {
 
   it('build', function() {
-    nico.build = function() {};
-    var nicoBuild = sinon.spy(nico, 'build');
+    lnico.build = function() {};
+    var nicoBuild = sinon.spy(lnico, 'build');
     doc({
       build: true
     });
@@ -15,8 +15,8 @@ describe('doc', function() {
   });
 
   it('watch', function() {
-    nico.server = function() {};
-    var server = sinon.spy(nico, 'server');
+    lnico.server = function() {};
+    var server = sinon.spy(lnico, 'server');
     doc({
       watch: true
     });
@@ -24,11 +24,11 @@ describe('doc', function() {
   });
 
   it('publish', function() {
-    nico.build = function() {};
+    lnico.build = function() {};
     var mockUpload = {
       './upload': function() {}
     };
-    var build = sinon.spy(nico, 'build');
+    var build = sinon.spy(lnico, 'build');
     var upload = sinon.spy(mockUpload, './upload');
     var doc = muk('../lib/doc', mockUpload);
     doc({

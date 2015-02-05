@@ -125,7 +125,7 @@
     $('h4 em, h3 em, h3 code, h4 code').parent().addClass('doc-api');
 
     // 给 iframe 加链接
-    $('.nico-iframe').each(function(i, item) {
+    $('.lnico-iframe').each(function(i, item) {
       var src = $(item).find('iframe').attr('src')
       var html = '<a class="new-window" target="_blank" href="' + src + '">Open</a>'
       $(item).append(html)

@@ -10,9 +10,7 @@
 
 **新一代包管理系统 。**
 
-## lego@1.x 
-
-基于[spm](https://github.com/spmjs/spm)改造而来。目前正在完善和增加特性功能中。
+## lego@1.x
 
 https://github.com/imweb/lego
 
