@@ -1,7 +1,1 @@
-node_modules
-coverage
-scripts
-tests
-test/fixtures
-lib/theme/static
-lib/template
+node_modulescoveragescriptsteststest/fixtureslib/theme/staticlib/template

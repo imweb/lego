@@ -1,81 +1,1 @@
-{
-  "name": "lego",
-  "version": "1.1.4",
-  "preferGlobal": "true",
-  "description": "Static Package Manager",
-  "author": "Hsiaoming Yang <me@lepture.com>",
-  "homepage": "http://lego.oa.com",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/imweb/lego/lego.git"
-  },
-  "keywords": [
-    "seajs",
-    "module",
-    "cmd",
-    "legojs",
-    "package",
-    "tool",
-    "command line",
-    "commonjs",
-    "component",
-    "bower",
-    "npm",
-    "browser"
-  ],
-  "dependencies": {
-    "archy": "~1.0.0",
-    "co": "3.1.0",
-    "lego-colorful": "*",
-    "commander": "~2.5.0",
-    "lego-require": "*",
-    "empty-dir": "~0.1.0",
-    "lego-exeq": "*",
-    "lego-father": "*",
-    "extend": "~2.0.0",
-    "fs-extra": "~0.13.0",
-    "fs-symlink": "~1.1.2",
-    "fstream": "~1.0.3",
-    "fstream-ignore": "~1.0.2",
-    "gulp-template": "~1.1.1",
-    "inherits": "~1.0.0",
-    "inquirer": "~0.8.0",
-    "internal-ip": "~1.0.0",
-    "jscoverage": "~0.3.8",
-    "lnico": "*",
-    "react-tools": "~0.12.2",
-    "request": "~2.51.0",
-    "rimraf": "~2.2.8",
-    "semver": "~4.1.0",
-    "serve-lego": "*",
-    "lego-build": "*",
-    "lego-client": "*",
-    "lego-log": "*",
-    "legorc": "*",
-    "tar": "~1.0.3",
-    "vinyl-fs": "~0.3.13",
-    "whoami": "~0.0.3",
-    "win-spawn": "~2.0.0"
-  },
-  "devDependencies": {
-    "gulp-unzip": "*",
-    "istanbul": "*",
-    "jshint": "*",
-    "ls-archive": "*",
-    "mocha": "*",
-    "muk": "*",
-    "should": "*",
-    "sinon": "*"
-  },
-  "bin": {
-    "lego": "bin/lego"
-  },
-  "engines": {
-    "node": ">=0.10.0"
-  },
-  "scripts": {
-    "test": "make test"
-  },
-  "readme": "lego",
-  "readmeFilename": "README.md"
-}
+{  "name": "lego",  "version": "1.1.4",  "preferGlobal": "true",  "description": "Static Package Manager",  "author": "Hsiaoming Yang <me@lepture.com>",  "homepage": "http://lego.oa.com",  "repository": {    "type": "git",    "url": "https://github.com/imweb/lego/lego.git"  },  "keywords": [    "seajs",    "module",    "cmd",    "legojs",    "package",    "tool",    "command line",    "commonjs",    "component",    "bower",    "npm",    "browser"  ],  "dependencies": {    "archy": "~1.0.0",    "co": "3.1.0",    "lego-colorful": "*",    "commander": "~2.5.0",    "lego-require": "*",    "empty-dir": "~0.1.0",    "lego-exeq": "*",    "lego-father": "*",    "extend": "~2.0.0",    "fs-extra": "~0.13.0",    "fs-symlink": "~1.1.2",    "fstream": "~1.0.3",    "fstream-ignore": "~1.0.2",    "gulp-template": "~1.1.1",    "inherits": "~1.0.0",    "inquirer": "~0.8.0",    "internal-ip": "~1.0.0",    "jscoverage": "~0.3.8",    "lnico": "*",    "react-tools": "~0.12.2",    "request": "~2.51.0",    "rimraf": "~2.2.8",    "semver": "~4.1.0",    "serve-lego": "*",    "lego-build": "*",    "lego-client": "*",    "lego-log": "*",    "legorc": "*",    "tar": "~1.0.3",    "vinyl-fs": "~0.3.13",    "whoami": "~0.0.3",    "win-spawn": "~2.0.0"  },  "devDependencies": {    "gulp-unzip": "*",    "istanbul": "*",    "jshint": "*",    "ls-archive": "*",    "mocha": "*",    "muk": "*",    "should": "*",    "sinon": "*"  },  "bin": {    "lego": "bin/lego"  },  "engines": {    "node": ">=0.10.0"  },  "scripts": {    "test": "make test"  },  "readme": "lego",  "readmeFilename": "README.md"}
