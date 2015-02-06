@@ -16,7 +16,7 @@
 https://github.com/imweb/lego
 
 
-##  **fork于[spm](https://github.com/spmjs/spm)**
+####  **fork于[spm](https://github.com/spmjs/spm)**
 
 
 ## 讨论和报告 Bug
