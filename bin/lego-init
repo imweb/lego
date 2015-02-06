@@ -59,7 +59,7 @@ inquirer.prompt([{
 }, {
   message: 'Version',
   name: 'version',
-  default: '0.0.0',
+  default: '0.0.1',
   validate: function(input) {
     var done = this.async();
     if (!semver.valid(input)) {
@@ -70,12 +70,26 @@ inquirer.prompt([{
   }
 }, {
   message: 'Description',
-  name: 'description'
+  name: 'description',
+  default: path.basename(process.cwd()),
 }, {
   message: 'Author',
   name: 'author',
   default: require('whoami')
+}, {
+  message: 'Package category',
+  name: 'category',
+  default: '1',
+  validate: function(input) {
+    var done = this.async();
+    if (!input.match(/^\d+$/)) {
+      console.warn(color.red('Category must be a number.'));
+      return;
+    }
+    done(true);
+  }
 }], function( answers ) {
+  console.log(answers);
   answers.varName = answers.name.replace(/\-(\w)/g, function(all, letter){
     return letter.toUpperCase();
   });
