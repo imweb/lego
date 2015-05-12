@@ -10,8 +10,11 @@ var gulpTemplate = require('gulp-template');
 var inquirer = require('inquirer');
 var semver = require('semver');
 var emptyDir = require('empty-dir').sync;
+var category = require('../lib/client').category;
+var log = require('lego-log');
 
 var NAME_REGEX = require('../lib/sdk/iduri').NAME_REGEX;
+
 
 /*
   template directory
@@ -26,6 +29,10 @@ template = template.replace(/^~/, homeDir);
 /*
   program init
 */
+
+program
+  .usage('[options] name')
+  .option('-r, --registry <url>', 'registry url of yuan server')
 
 program.on('--help', function() {
   console.log();
@@ -43,8 +50,8 @@ if (!emptyDir(process.cwd())) {
   return;
 }
 
-console.log('Creating a lego package: ');
-inquirer.prompt([{
+
+var questions = [{
   message: 'Package name',
   name: 'name',
   default: path.basename(process.cwd()),
@@ -76,36 +83,121 @@ inquirer.prompt([{
   message: 'Author',
   name: 'author',
   default: require('whoami')
-}, {
-  message: 'Package category',
-  name: 'category',
-  default: '1',
-  validate: function(input) {
-    var done = this.async();
-    if (!input.match(/^\d+$/)) {
-      console.warn(color.red('Category must be a number.'));
-      return;
-    }
-    done(true);
-  }
-}], function( answers ) {
-  console.log(answers);
-  answers.varName = answers.name.replace(/\-(\w)/g, function(all, letter){
-    return letter.toUpperCase();
-  });
-  answers.yuanUrl = legorc.get('registry');
+}];
 
-  vfs.src(path.join(template, '**'), { dot: true })
-    .pipe(gulpTemplate(answers))
-    .pipe(vfs.dest('./'))
-    .on('end', function() {
-      // https://github.com/npm/npm/issues/1862
-      fs.renameSync('./gitignore', './.gitignore');
-      fs.renameSync('./legoignore', './.legoignore');
-      fs.renameSync('./travis.yml', './.travis.yml');
+var currentCategory = 1 , currentCategoryName = '基础组件';//默认分类
 
-      console.log();
-      console.log(color.green('Initialize a lego package Succeccfully!'));
-      console.log();
+
+function doInquirer(){
+  console.log('Creating a lego package: ');
+  inquirer.prompt(questions, function( answers ) {
+    
+    //console.log(currentCategory);
+    answers.category = currentCategory;
+    answers.categoryName = currentCategoryName;
+
+    answers.varName = answers.name.replace(/\-(\w)/g, function(all, letter){
+      return letter.toUpperCase();
     });
+    answers.yuanUrl = legorc.get('registry');
+
+    console.log(answers);
+    
+    vfs.src(path.join(template, '**'), { dot: true })
+      .pipe(gulpTemplate(answers))
+      .pipe(vfs.dest('./'))
+      .on('end', function() {
+        // https://github.com/npm/npm/issues/1862
+        fs.renameSync('./gitignore', './.gitignore');
+        fs.renameSync('./legoignore', './.legoignore');
+        fs.renameSync('./travis.yml', './.travis.yml');
+
+        console.log();
+        console.log(color.green('Initialize a lego package Succeccfully!'));
+        console.log();
+      });
+  });
+}
+
+function getQuestions(data  , parent , list){
+  list = list || [];
+
+  var dataKey = data.key , dataItem = data.item;
+
+  var parentKey = parent && parent.key || 0;
+  var _item = {
+    type : 'list',
+    name : 'category:' + data.key,
+    //name : data.item
+    message : !data.key?'Select category on the registry server :' : ('Select category within ' + data.item + ' :'),
+    filter : function(value){
+      currentCategory =  _item.__choices && _item.__choices[value] || dataKey;
+      currentCategoryName = value;
+      console.log(currentCategory , currentCategoryName);
+      return value;
+    }
+  }
+
+  
+  if(parent){
+    _item.when = function(answers){
+      //console.log(answers , dataKey , parentKey , '=============');
+      if(answers['category:' + parentKey] == dataItem){
+        return true;
+      }else{
+        return false;
+      }
+    } 
+  }
+  
+
+  var nextData = [];
+
+  if(data.list){
+    _item.choices = [];
+    _item.__choices = {};
+    data.list.forEach(function(value , i){
+      _item.choices.push(value.item);
+
+      _item.__choices[value.item] = value.key;
+
+      if(value.list){
+        nextData.push(value);
+      }
+    });
+  }
+
+  list.push(_item);
+
+  if(data.list){
+    nextData.forEach(function(value , i){
+      getQuestions(value  , data , list);
+    });
+  }
+
+  return list;
+}
+
+console.log('loading the category on the registry server：');
+
+category({
+  registry: program.registry
+}, function(err , data) {
+
+  if (err || !data || !data.list) {
+
+    log.error('exit', err.message);
+    console.log();
+    doInquirer();
+    process.exit(2);
+  }
+
+  var list = getQuestions(data);
+
+  questions = questions.concat(list);
+  doInquirer();
 });
+
+
+
+

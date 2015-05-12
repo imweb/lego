@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-
+debugger;
 require('lego-colorful').colorful();
 var program = require('commander');
 var log = require('lego-log');
