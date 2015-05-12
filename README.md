@@ -60,8 +60,3 @@ $ npm install lego -g
 ## License
 
 LEGO is available under the terms of the MIT License.
-
-## Memo
-
-* Why lego3: https://github.com/iwmeb/lego/issues/819
-* Release History: https://github.com/iwmeb/lego/releases
