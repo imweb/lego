@@ -65,4 +65,3 @@ LEGO is available under the terms of the MIT License.
 
 * Why lego3: https://github.com/iwmeb/lego/issues/819
 * Release History: https://github.com/iwmeb/lego/releases
-* lego2: https://github.com/iwmeb/lego/tree/2.x
