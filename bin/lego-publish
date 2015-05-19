@@ -20,7 +20,7 @@ program.on('--help', function() {
   console.log('  ' + 'Examples:'.to.bold.blue.color);
   console.log();
   console.log('   $ ' + 'lego publish'.to.magenta.color);
-  console.log('   $ ' + 'lego publish'.to.magenta.color + ' -r'.to.cyan.color + ' http://lego.oa.com');
+  console.log('   $ ' + 'lego publish'.to.magenta.color + ' -r'.to.cyan.color + ' http://lego.imweb.io');
   console.log();
 });
 

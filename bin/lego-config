@@ -21,7 +21,7 @@ program
 program.on('--help', function() {
   console.log('  Examples:'.to.bold.blue.color);
   console.log();
-  console.log('    $', 'lego config'.to.magenta.color, 'set registry http://lego.oa.com');
+  console.log('    $', 'lego config'.to.magenta.color, 'set registry http://lego.imweb.io');
   console.log('    $', 'lego config'.to.magenta.color, 'get registry');
   console.log('    $', 'lego config'.to.magenta.color, 'delete auth');
   console.log('    $', 'lego config'.to.magenta.color, 'list');

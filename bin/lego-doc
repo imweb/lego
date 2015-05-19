@@ -31,7 +31,7 @@ program.on('--help', function() {
   console.log('    $', 'lego doc'.to.magenta.color, 'watch');
   console.log('    $', 'lego doc'.to.magenta.color, 'watch --port 8080');
   console.log('    $', 'lego doc'.to.magenta.color, 'publish');
-  console.log('    $', 'lego doc'.to.magenta.color, 'publish -r http://lego.oa.com');
+  console.log('    $', 'lego doc'.to.magenta.color, 'publish -r http://lego.imweb.io');
   console.log();
 });
 

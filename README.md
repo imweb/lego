@@ -28,7 +28,6 @@ https://github.com/imweb/lego
 # lego
 
 [![NPM version](https://img.shields.io/npm/v/lego.svg?style=flat)](https://npmjs.org/package/lego)
-[![Build Status](https://img.shields.io/travis/legojs/lego.svg?style=flat)](https://travis-ci.org/legojs/lego)
 [![NPM downloads](http://img.shields.io/npm/dm/lego.svg?style=flat)](https://npmjs.org/package/lego)
 
 Brand new **static package manager** for browser.
@@ -43,14 +42,14 @@ $ npm install lego -g
 
 ## Usage
 
-- Getting Started: http://lego.oa.com/documentation
-- Develop a package: http://lego.oa.com/documentation/develop-a-package
+- Getting Started: http://lego.imweb.io/documentation
+- Develop a package: http://lego.imweb.io/documentation/develop-a-package
 - 中文文档：http://sorrycc.gitbooks.io/lego-handbook/content/
 
 ## Packaging Server
 
-- Website: http://lego.oa.com/
-- Repository: https://github.com/iwmeb/legojs.io/
+- Website: http://lego.imweb.io/
+- Repository: https://github.com/iwmeb/lego/
 
 ## Report a issue
 
