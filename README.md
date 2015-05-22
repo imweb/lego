@@ -49,12 +49,12 @@ $ npm install lego -g
 ## Packaging Server
 
 - Website: http://lego.imweb.io/
-- Repository: https://github.com/iwmeb/lego/
+- Repository: https://github.com/imweb/lego/
 
 ## Report a issue
 
-* [All issues](https://github.com/iwmeb/lego/issues)
-* [New issue](https://github.com/iwmeb/lego/issues/new)
+* [All issues](https://github.com/imweb/lego/issues)
+* [New issue](https://github.com/imweb/lego/issues/new)
 
 ## License
 
