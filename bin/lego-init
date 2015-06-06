@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 var color = require('lego-colorful').color;
-var fs = require('fs');
 var path = require('path');
 var program = require('commander');
 var legorc = require('legorc');
@@ -12,6 +11,11 @@ var semver = require('semver');
 var emptyDir = require('empty-dir').sync;
 var category = require('../lib/client').category;
 var log = require('lego-log');
+var lego_category = require('lego-category');
+var legoModify = require('lego-modify');
+var fs = require('fs-extra');
+
+// console.log(fs);
 
 var NAME_REGEX = require('../lib/sdk/iduri').NAME_REGEX;
 
@@ -45,16 +49,30 @@ program.on('--help', function() {
 
 program.parse(process.argv);
 
-if (!emptyDir(process.cwd())) {
+/*if (!emptyDir(process.cwd())) {
   console.warn(color.yellow('Existing files here, please run init command in an empty folder!'));
   return;
 }
+*/
+
+var packageContent = {};
+(function getPackage(){
+  var packPath = './package.json';
+  if(fs.existsSync(packPath)){
+    try{
+       packageContent = fs.readJsonSync(packPath/*,{encoding:'utf-8'}*/);
+    }catch(e){
+
+    }
+  }
+})();
+
 
 
 var questions = [{
   message: 'Package name',
   name: 'name',
-  default: path.basename(process.cwd()),
+  default: packageContent.name || path.basename(process.cwd()),
   validate: function(input) {
     var done = this.async();
     if (!NAME_REGEX.test(input)) {
@@ -66,7 +84,7 @@ var questions = [{
 }, {
   message: 'Version',
   name: 'version',
-  default: '0.0.1',
+  default: packageContent.version || '0.0.1',
   validate: function(input) {
     var done = this.async();
     if (!semver.valid(input)) {
@@ -78,20 +96,44 @@ var questions = [{
 }, {
   message: 'Description',
   name: 'description',
-  default: path.basename(process.cwd()),
+  default: packageContent.description || path.basename(process.cwd()),
 }, {
   message: 'Author',
   name: 'author',
-  default: require('whoami')
+  default: (function(){
+    var author = packageContent.author ;
+    switch(Object.prototype.toString.call(author)){
+      case "[object String]":
+        return author;
+      case "[object Object]":
+        if(author.name || author.email){
+          return author.name + ' ' + (author.email?'<'+ author.email +'>':'')
+        }
+        return '';
+      case "[object Array]":
+        author = author[0] || {};
+        if(author.name || author.email){
+          return author.name + ' ' + (author.email?'<'+ author.email +'>':'')
+        }
+        return '';
+    }
+    return '';
+  })()|| require('whoami')
 }];
 
-var currentCategory = 1 , currentCategoryName = '基础组件';//默认分类
 
-
+var deleteQuestionsName = {} , currentCategory = 1 , currentCategoryName = '基础组件';//默认分类
 function doInquirer(){
   console.log('Creating a lego package: ');
   inquirer.prompt(questions, function( answers ) {
     
+    for(var i in deleteQuestionsName){
+      if(deleteQuestionsName[i]){
+        delete answers[i];
+        delete deleteQuestionsName[i];
+      }
+    }
+
     //console.log(currentCategory);
     answers.category = currentCategory;
     answers.categoryName = currentCategoryName;
@@ -101,21 +143,54 @@ function doInquirer(){
     });
     answers.yuanUrl = legorc.get('registry');
 
+    console.log('\n');
+
     console.log(answers);
-    
-    vfs.src(path.join(template, '**'), { dot: true })
+
+    console.log('\n\n\n\n');
+
+    inquirer.prompt([{
+      type: "input",
+      name: "askAgain",
+      message: "Is this ok? (yes) ",
+      default: 'yes'
+    }],function(askAnswers){
+
+      if(!askAnswers.askAgain.toLowerCase().match(/^((yes)|y)$/)){
+
+        console.log('Aborted.');
+        process.exit(2);
+
+      }
+
+
+      vfs.src(path.join(template, '**'), { dot: true })
       .pipe(gulpTemplate(answers))
-      .pipe(vfs.dest('./'))
+      .pipe(legoModify(packageContent))
+      .pipe(vfs.dest(function(file){
+        if(!file.path.match(/package\.json$/)){
+          var path = file.path.replace(/^(.)+\/template\// , './');
+          if(fs.existsSync(path)){
+            return './.tmp'
+          }
+        }
+        return './' ;
+      },{overwrite:true}))
       .on('end', function() {
         // https://github.com/npm/npm/issues/1862
-        fs.renameSync('./gitignore', './.gitignore');
-        fs.renameSync('./legoignore', './.legoignore');
-        fs.renameSync('./travis.yml', './.travis.yml');
+
+        fs.removeSync('./.tmp');
+
+        fs.move('./gitignore', './.gitignore' , function (err){});
+        fs.move('./legoignore', './.legoignore', function (err){});
+        fs.move('./travis.yml', './.travis.yml', function (err){});
 
         console.log();
         console.log(color.green('Initialize a lego package Succeccfully!'));
         console.log();
       });
+    });
+
   });
 }
 
@@ -166,7 +241,7 @@ function getQuestions(data  , parent , list){
       }
     });
   }
-
+  deleteQuestionsName[_item.name] = true;//存储需要删除的key
   list.push(_item);
 
   if(data.list){
@@ -178,26 +253,70 @@ function getQuestions(data  , parent , list){
   return list;
 }
 
-console.log('loading the category on the registry server：');
+function getCategory(){
 
-category({
-  registry: program.registry
-}, function(err , data) {
+  var myCategory = null;
+  if(myCategory = lego_category.get('category')){
+    try{
+      myCategory = JSON.parse(myCategory);
+      questions.push.apply(questions,getQuestions(myCategory));
+    }catch(e){
+      myCategory = null;
+      log.warn('warn', 'A valid category should be something like Object {}');
+    }
+  }
+  return myCategory;
+}
 
-  if (err || !data || !data.list) {
+function beginDoInquirer(){
 
-    log.error('exit', err.message);
-    console.log();
+  var myCategory = getCategory();
+
+  if(myCategory){
     doInquirer();
-    process.exit(2);
+  }else{
+    console.log('Loading the category on the registry server：\n');
   }
 
-  var list = getQuestions(data);
+  category({
+    registry: program.registry
+  }, function(err , data) {
 
-  questions = questions.concat(list);
-  doInquirer();
-});
+    var flag = false;
+    if (err || !data || !data.list) {
 
+      // log.error('exit', err.message);
+      // console.log();
+      //process.exit(2);
+    }else{
+
+      flag = true;
+      if(!myCategory){
+        questions.push.apply(questions,getQuestions(data));
+      }
+
+    }
+
+    if(!myCategory){      
+      doInquirer();    
+    }
+    
+    if(flag){
+      var _category = '';
+      try{
+        _category = JSON.stringify(data);
+      }catch(e){
+        log.warn('warn', 'A valid category should be something like Object {}');
+      }
+
+      lego_category.set('category' , _category);
+    }
+
+  });
+
+}
+
+beginDoInquirer();
 
 
 

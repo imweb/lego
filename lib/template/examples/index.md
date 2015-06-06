@@ -4,8 +4,7 @@
 
 ## Normal usage
 
-````javascript
-seajs.use('index', function(<%= varName %>) {
-
-});
-````
+```js
+var <%= varName %> = require('<%= name %>');
+// use <%= varName %>
+```
