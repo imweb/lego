@@ -14,11 +14,18 @@ program
   .version(pkg.version, '-v, --version')
   .usage('<command> [options]')
   .on('--help', printHelp)
+  .on('-h', printHelp)
   .parse(process.argv);
 
 var subcmd = program.args[0];
 var args = process.argv.slice(3);
 
+var acronym = {
+  "i" : "install",
+  "un" : "uninstall",
+  "se" : "search",
+  "up" : "update"
+}
 
 if (!subcmd) {
   program.help();
@@ -63,7 +70,9 @@ function printHelp() {
   console.log();
 }
 
+
 function executable(subcmd) {
+  subcmd = acronym[subcmd] || subcmd;
   var file = join(__dirname, 'lego-' + subcmd);
   if (exists(file)) {
     return file;

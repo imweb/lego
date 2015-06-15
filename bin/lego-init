@@ -163,14 +163,20 @@ function doInquirer(){
 
       }
 
-
       vfs.src(path.join(template, '**'), { dot: true })
       .pipe(gulpTemplate(answers))
       .pipe(legoModify(packageContent))
       .pipe(vfs.dest(function(file){
-        if(!file.path.match(/package\.json$/)){
-          var path = file.path.replace(/^(.)+\/template\// , './');
-          if(fs.existsSync(path)){
+        var _path = file.path.split(path.sep);
+
+        if(path.basename(file.path).toLowerCase() != "package.json"){
+          var newPath , _index;
+          if((_index = _path.indexOf("template")) >= 0){
+            newPath = _path.slice(_index + 1) || [];
+            newPath.unshift(".");
+            newPath =  path.normalize(path.join.apply(path , newPath));
+          }
+          if(newPath && newPath != "." && fs.existsSync(newPath)){
             return './.tmp'
           }
         }
@@ -181,9 +187,9 @@ function doInquirer(){
 
         fs.removeSync('./.tmp');
 
-        fs.move('./gitignore', './.gitignore' , function (err){});
-        fs.move('./legoignore', './.legoignore', function (err){});
-        fs.move('./travis.yml', './.travis.yml', function (err){});
+        fs.move('./gitignore', './.gitignore' , {clobber:true} , function (err){});
+        fs.move('./legoignore', './.legoignore', {clobber:true}, function (err){});
+        fs.move('./travis.yml', './.travis.yml', {clobber:true}, function (err){});
 
         console.log();
         console.log(color.green('Initialize a lego package Succeccfully!'));
