@@ -138,7 +138,7 @@ function doInquirer(){
     answers.category = currentCategory;
     answers.categoryName = currentCategoryName;
 
-    answers.varName = answers.name.replace(/\-(\w)/g, function(all, letter){
+    answers.varName = answers.name.replace(/[\-\.](\w)/g, function(all, letter){
       return letter.toUpperCase();
     });
     answers.yuanUrl = legorc.get('registry');
