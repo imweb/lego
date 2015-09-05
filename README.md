@@ -1,12 +1,10 @@
-**新一代包管理系统 。**
-
+**新一代包管理系统，fork于[spm](https://github.com/spmjs/spm)。**
 
 ## Lego
 
+基于组件认证和反馈体系的组件组织方式。
+
 ![](http://lego.imweb.io/img/logo_95.png)
-
-
-####  **fork于[spm](https://github.com/spmjs/spm)**
 
 
 ## 讨论和报告 Bug
