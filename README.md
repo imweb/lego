@@ -1,9 +1,9 @@
 **新一代包管理系统 。**
 
 
-## lego@1.x
+## Lego
 
-https://github.com/imweb/lego
+![](http://lego.imweb.io/img/logo_95.png)
 
 
 ####  **fork于[spm](https://github.com/spmjs/spm)**
@@ -34,7 +34,6 @@ $ npm install lego -g
 
 - Getting Started: http://lego.imweb.io/documentation
 - Develop a package: http://lego.imweb.io/documentation/develop-a-package
-- 中文文档：http://sorrycc.gitbooks.io/lego-handbook/content/
 
 ## Packaging Server
 
