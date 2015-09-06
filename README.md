@@ -2,7 +2,7 @@
 
 ## Lego
 
-基于组件认证和反馈体系的组件组织方式。
+基于组件认证和反馈体系的组件组织方式。平台：http://lego.imweb.io
 
 ![](http://lego.imweb.io/img/logo_95.png)
 
