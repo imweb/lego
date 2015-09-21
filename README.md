@@ -6,6 +6,10 @@
 
 ![](http://lego.imweb.io/img/logo_95.png)
 
+## 构建和打包
+
+目前基于[fis3](http://fex.baidu.com/)的构建体系[fis3-hook-lego](https://github.com/imweb/fis3-hook-lego)，其他体系下欢迎大家[Fork](https://github.com/imweb/lego/fork) & [Pull Request](https://github.com/imweb/lego/pulls) & [Issue](https://github.com/imweb/lego/issues)
+
 
 ## 讨论和报告 Bug
 
