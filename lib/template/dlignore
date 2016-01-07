@@ -1,0 +1,14 @@
+dist
+_site
+sea-modules
+lego_modules
+node_modules
+.git
+tests
+examples
+test
+.dlignore
+.travis.yml
+package.json
+HISTORY.md
+README.md
