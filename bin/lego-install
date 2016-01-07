@@ -13,6 +13,7 @@ program
   .option('-f, --force', 'force to download a unstable module')
   .option('-q, --quiet', 'show less logs')
   .option('-S, --save', 'save dependencies to package.json')
+  .option('-a, --all', 'install all files as possible')
   .option('-SD, --save-dev', 'save devDependencies to package.json')
   .option('--verbose', 'show more logs')
   .option('--no-color', 'disable colorful print');

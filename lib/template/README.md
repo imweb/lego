@@ -4,11 +4,18 @@
 
 <%= description %>
 
+## Author
+<%= author %>
+
 ## Install
 
 ```
 $ lego install <%= name %> --save
+$ lego install <%= name %> --save -all
 ```
+
+## API
+[API desc]
 
 ## Usage
 

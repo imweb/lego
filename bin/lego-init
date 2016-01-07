@@ -188,6 +188,7 @@ function doInquirer(){
         fs.removeSync('./.tmp');
 
         fs.move('./gitignore', './.gitignore' , {clobber:true} , function (err){});
+        fs.move('./dlignore', './.dlignore' , {clobber:true} , function (err){});
         fs.move('./legoignore', './.legoignore', {clobber:true}, function (err){});
         fs.move('./travis.yml', './.travis.yml', {clobber:true}, function (err){});
 
